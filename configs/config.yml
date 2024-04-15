@@ -1,0 +1,11 @@
+port: 8000
+
+db: 
+  host: "localhost"
+  port: "5432"
+  username: "postgres"
+  dbname: "postgres"
+  sslmode: "disable"
+
+internal:
+  vehicleUrl: "https://api.jsonserve.com/iGt0sH"

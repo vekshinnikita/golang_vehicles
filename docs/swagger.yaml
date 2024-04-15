@@ -1,0 +1,273 @@
+basePath: /api
+definitions:
+  golang_vehicles.Owner:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+    type: object
+  golang_vehicles.UpdateOwner:
+    properties:
+      name:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+    type: object
+  golang_vehicles.UpdateVehicle:
+    properties:
+      mark:
+        type: string
+      model:
+        type: string
+      owner:
+        $ref: '#/definitions/golang_vehicles.UpdateOwner'
+      regNum:
+        type: string
+      year:
+        type: integer
+    type: object
+  golang_vehicles.Vehicle:
+    properties:
+      id:
+        type: integer
+      mark:
+        type: string
+      model:
+        type: string
+      owner:
+        $ref: '#/definitions/golang_vehicles.Owner'
+      regNum:
+        type: string
+      year:
+        type: integer
+    required:
+    - mark
+    - model
+    - regNum
+    type: object
+  handler.createVehicleInput:
+    properties:
+      regNums:
+        items:
+          type: string
+        type: array
+    required:
+    - regNums
+    type: object
+  handler.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  pagination.PaginatedResponse-array_golang_vehicles_Vehicle:
+    properties:
+      current_page:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/golang_vehicles.Vehicle'
+        type: array
+      first_page:
+        type: integer
+      last_page:
+        type: integer
+      page_size:
+        type: integer
+      total_records:
+        type: integer
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  title: Golang Vehicle
+  version: "1.0"
+paths:
+  /vehicles:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Sort field example '-name' or 'name'
+        in: query
+        name: sort
+        type: integer
+      - description: Filter mark
+        in: query
+        name: mark
+        type: string
+      - description: Filter mark like
+        in: query
+        name: mark_lk
+        type: string
+      - description: Filter mark
+        in: query
+        name: mark
+        type: string
+      - description: Filter mark like
+        in: query
+        name: mark_lk
+        type: string
+      - description: Filter model
+        in: query
+        name: model
+        type: string
+      - description: Filter model like
+        in: query
+        name: model_lk
+        type: string
+      - description: Filter regNum
+        in: query
+        name: regNum
+        type: string
+      - description: Filter regNum like
+        in: query
+        name: regNum_lk
+        type: string
+      - description: Filter mark
+        in: query
+        name: year
+        type: integer
+      - description: Filter year grater than
+        in: query
+        name: year_gt
+        type: integer
+      - description: Filter year less than
+        in: query
+        name: year_lt
+        type: integer
+      - description: Filter year between two years example '2000:2005'
+        in: query
+        name: year_btw
+        type: string
+      - description: Filter owner_name
+        in: query
+        name: owner_name
+        type: string
+      - description: Filter owner_name like
+        in: query
+        name: owner_name_lk
+        type: string
+      - description: Filter owner_surname
+        in: query
+        name: owner_surname
+        type: string
+      - description: Filter owner_surname like
+        in: query
+        name: owner_surname_lk
+        type: string
+      - description: Filter owner_patronymic
+        in: query
+        name: owner_patronymic
+        type: string
+      - description: Filter owner_patronymic like
+        in: query
+        name: owner_patronymic_lk
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/pagination.PaginatedResponse-array_golang_vehicles_Vehicle'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Create vehicles
+      tags:
+      - vehicle
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: regNums
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.createVehicleInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            items:
+              type: integer
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Create vehicles
+      tags:
+      - vehicle
+  /vehicles/{id}:
+    delete:
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Update vehicles
+      tags:
+      - vehicle
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Partial vehicle fields
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/golang_vehicles.UpdateVehicle'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Update vehicles
+      tags:
+      - vehicle
+swagger: "2.0"
